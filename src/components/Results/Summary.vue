@@ -108,11 +108,15 @@ export default {
 
 				// Check question options to find which needs to be increased
 				answers.forEach(answer => {
-					for (const i in questionOptionsStats) {
-						if (questionOptionsStats[i].text === answer.text) {
-							questionOptionsStats[i].count++
-							break
-						}
+					const optionsStatIndex = questionOptionsStats.findIndex(option => option.text === answer.text)
+					if (optionsStatIndex < 0) {
+						questionOptionsStats.push({
+							'text': answer.text,
+							'count': 1,
+							'percentage': 0,
+						})
+					} else {
+						questionOptionsStats[optionsStatIndex].count++
 					}
 				})
 			})
@@ -126,9 +130,9 @@ export default {
 			})
 
 			// Fill percentage values
-			for (const i in questionOptionsStats) {
-				questionOptionsStats[i].percentage = Math.round((100 * questionOptionsStats[i].count) / this.submissions.length)
-			}
+			questionOptionsStats.forEach(questionOptionsStat => {
+				questionOptionsStat.percentage = Math.round((100 * questionOptionsStat.count) / this.submissions.length)
+			})
 
 			return questionOptionsStats
 		},
