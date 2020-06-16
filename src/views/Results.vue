@@ -38,7 +38,8 @@
 		</TopBar>
 
 		<header v-if="!noSubmissions">
-			<h2>{{ t('forms', '{amount} responses for {title}', { amount: form.submissions.length, title: form.title }) }}</h2>
+			<h2>{{ formTitle }}</h2>
+			<p>{{ t('forms', '{amount} responses', { amount: form.submissions.length }) }}</p>
 			<div class="response-actions">
 				<div class="response-actions__radio">
 					<input id="show-summary--true"
@@ -293,46 +294,47 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.app-content header h2 {
-	font-size: 2em;
-	font-weight: bold;
-	margin-top: 32px;
-	margin-bottom: 8px;
-	padding-left: 14px;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
+.app-content header {
+	h2 {
+		font-size: 2em;
+		font-weight: bold;
+		margin-top: 32px;
+		padding-left: 14px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
 
-.response-actions {
-	display: flex;
-	align-items: center;
-	padding-left: 14px;
+	.response-actions {
+		display: flex;
+		align-items: center;
+		padding-left: 14px;
 
-	&__radio {
-		margin-right: 8px;
+		&__radio {
+			margin-right: 8px;
 
-		&__item {
-			border-radius: var(--border-radius-pill);
-			padding: 8px 16px;
-			font-weight: bold;
-			background-color: var(--color-background-dark);
+			&__item {
+				border-radius: var(--border-radius-pill);
+				padding: 8px 16px;
+				font-weight: bold;
+				background-color: var(--color-background-dark);
 
-			&:first-of-type {
-				border-top-right-radius: 0;
-				border-bottom-right-radius: 0;
-				padding-right: 8px;
-			}
+				&:first-of-type {
+					border-top-right-radius: 0;
+					border-bottom-right-radius: 0;
+					padding-right: 8px;
+				}
 
-			&:last-of-type {
-				border-top-left-radius: 0;
-				border-bottom-left-radius: 0;
-				padding-left: 8px;
-			}
+				&:last-of-type {
+					border-top-left-radius: 0;
+					border-bottom-left-radius: 0;
+					padding-left: 8px;
+				}
 
-			&--active {
-				background-color: var(--color-primary);
-				color: var(--color-primary-text)
+				&--active {
+					background-color: var(--color-primary);
+					color: var(--color-primary-text)
+				}
 			}
 		}
 	}

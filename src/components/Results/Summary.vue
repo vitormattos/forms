@@ -24,14 +24,15 @@
 	<div class="section question">
 		<h3>{{ question.text }}</h3>
 		<p class="question-detail">
-			{{ questionType }}
+			{{ answerTypes[question.type].label }}
 		</p>
-		<ol v-if="question.type == 'multiple' || question.type == 'multiple_unique'" class="question-multiple">
+		<ol v-if="question.type == 'multiple' || question.type == 'multiple_unique' || question.type == 'dropdown'"
+			class="question-multiple">
 			<li v-for="questionOption in questionOptions"
 				:key="questionOption.id">
 				<label :for="questionOption.text.replace(/\s+/g, '')">
-					{{ questionOption.percentage }}%, {{ questionOption.count }}:
-					<span>{{ questionOption.text }}</span>
+					{{ questionOption.count }} <span class="question-option-percentage">({{ questionOption.percentage }}%):</span>
+					<span class="question-option-text">{{ questionOption.text }}</span>
 				</label>
 				<meter :id="questionOption.text.replace(/\s+/g, '')"
 					min="0"
@@ -39,7 +40,7 @@
 					:value="questionOption.count" />
 			</li>
 		</ol>
-		<ul v-if="question.type == 'short' || question.type == 'long'" class="question-text">
+		<ul v-else class="question-text">
 			<li v-for="textAnswer in textAnswers"
 				:key="textAnswer.id">
 				{{ textAnswer }}
@@ -49,11 +50,10 @@
 </template>
 
 <script>
+import answerTypes from '../../models/AnswerTypes'
+
 export default {
 	name: 'Summary',
-
-	components: {
-	},
 
 	props: {
 		submissions: {
@@ -66,23 +66,13 @@ export default {
 		},
 	},
 
-	computed: {
-		questionType() {
-			if (this.question.type === 'multiple_unique') {
-				return t('forms', 'Multiple choice')
-			}
-			if (this.question.type === 'multiple') {
-				return t('forms', 'Checkboxes')
-			}
-			if (this.question.type === 'short') {
-				return t('forms', 'Short answer')
-			}
-			if (this.question.type === 'long') {
-				return t('forms', 'Long text')
-			}
-			return ''
-		},
+	data() {
+		return {
+			answerTypes,
+		}
+	},
 
+	computed: {
 		// For countable questions like multiple choice and checkboxes
 		questionOptions() {
 			const questionOptionsStats = []
@@ -210,8 +200,12 @@ export default {
 				position: relative;
 				padding: 8px 0;
 
-				&:first-child span {
+				&:first-child .question-option-text {
 					font-weight: bold;
+				}
+
+				.question-option-percentage {
+					color: var(--color-text-maxcontrast);
 				}
 
 				meter {
@@ -234,7 +228,7 @@ export default {
 				&:hover meter::-webkit-meter-optimum-value,
 				&:hover meter::-moz-meter-bar,
 				&:focus meter::-webkit-meter-optimum-value,
-				&:focus meter::-moz-meter-bar, {
+				&:focus meter::-moz-meter-bar {
 					animation: percentage-animation 1s linear infinite;
 					background: linear-gradient(40deg, var(--color-primary-element), var(--color-primary-element-light) 33%, var(--color-primary-element) 67%, var(--color-primary-element-light));
 					background-size: 300% 100%;
