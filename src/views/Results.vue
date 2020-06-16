@@ -149,6 +149,8 @@ export default {
 	data() {
 		return {
 			loadingResults: true,
+			submissions: [],
+			questions: [],
 			showSummary: true,
 		}
 	},
@@ -300,9 +302,14 @@ export default {
 		font-weight: bold;
 		margin-top: 32px;
 		padding-left: 14px;
+		padding-bottom: 8px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
+	}
+
+	p {
+		padding-left: 14px;
 	}
 
 	.response-actions {

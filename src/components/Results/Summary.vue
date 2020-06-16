@@ -41,9 +41,14 @@
 			</li>
 		</ol>
 		<ul v-else class="question-text">
-			<li v-for="textAnswer in textAnswers"
-				:key="textAnswer.id">
-				{{ textAnswer }}
+			<li v-for="(textAnswer, index) in textAnswers"
+				:key="index">
+				<template v-if="index === 0">
+					<strong>{{ textAnswer }}</strong>
+				</template>
+				<template v-else>
+					{{ textAnswer }}
+				</template>
 			</li>
 		</ul>
 	</div>
@@ -113,17 +118,12 @@ export default {
 			})
 
 			// Sort options by response count
-			function compare(object1, object2) {
-				if (object1.count < object2.count) {
-					return 1
+			questionOptionsStats.sort((object1, object2) => {
+				if (object1.count === object2.count) {
+					return 0
 				}
-				if (object1.count > object2.count) {
-					return -1
-				}
-				return 0
-			}
-
-			questionOptionsStats.sort(compare)
+				return object1.count < object2.count ? 1 : -1
+			})
 
 			// Fill percentage values
 			for (const i in questionOptionsStats) {
@@ -138,14 +138,14 @@ export default {
 			const textAnswers = []
 
 			// Also record 'No response'
-			textAnswers[0] = 0
+			let noResponseCount = 0
 
 			// Go through submissions to check which options have how many responses
 			this.submissions.forEach(submission => {
 				const answers = submission.answers.filter(answer => answer.questionId === this.question.id)
 				if (!answers.length) {
 					// Record 'No response'
-					textAnswers[0]++
+					noResponseCount++
 				}
 
 				// Add text answers
@@ -155,9 +155,8 @@ export default {
 			})
 
 			// Calculate no response percentage
-			const noResponseCount = textAnswers[0]
-			const noResponsePercentage = Math.round((100 * textAnswers[0]) / this.submissions.length)
-			textAnswers[0] = noResponsePercentage + '%, ' + noResponseCount + ': ' + t('forms', 'No response')
+			const noResponsePercentage = Math.round((100 * noResponseCount) / this.submissions.length)
+			textAnswers.unshift(noResponseCount + ' (' + noResponsePercentage + '%): ' + t('forms', 'No response'))
 
 			return textAnswers
 		},
@@ -199,6 +198,10 @@ export default {
 			li {
 				position: relative;
 				padding: 8px 0;
+
+				label {
+					cursor: default;
+				}
 
 				&:first-child .question-option-text {
 					font-weight: bold;
