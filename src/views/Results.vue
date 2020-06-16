@@ -148,8 +148,6 @@ export default {
 	data() {
 		return {
 			loadingResults: true,
-			submissions: [],
-			questions: [],
 			showSummary: true,
 		}
 	},
