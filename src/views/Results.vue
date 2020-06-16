@@ -38,7 +38,7 @@
 		</TopBar>
 
 		<header v-if="!noSubmissions">
-			<h2>{{ t('forms', 'Responses for {title}', { title: form.title }) }}</h2>
+			<h2>{{ t('forms', '{amount} responses for {title}', { amount: form.submissions.length, title: form.title }) }}</h2>
 			<div class="response-actions">
 				<div class="response-actions__radio">
 					<input id="show-summary--true"
@@ -91,7 +91,11 @@
 		</section>
 
 		<section v-if="!noSubmissions && showSummary">
-			SUMMARY-CONTENT
+			<Summary
+				v-for="question in form.questions"
+				:key="question.id"
+				:question="question"
+				:submissions="form.submissions" />
 		</section>
 
 		<section v-if="!noSubmissions && !showSummary">
@@ -118,6 +122,7 @@ import moment from '@nextcloud/moment'
 import Vue from 'vue'
 
 import EmptyContent from '../components/EmptyContent'
+import Summary from '../components/Results/Summary'
 import Submission from '../components/Results/Submission'
 import TopBar from '../components/TopBar'
 import ViewsMixin from '../mixins/ViewsMixin'
@@ -133,6 +138,7 @@ export default {
 		ActionButton,
 		AppContent,
 		EmptyContent,
+		Summary,
 		Submission,
 		TopBar,
 	},
@@ -289,10 +295,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-h2 {
+.app-content header h2 {
 	font-size: 2em;
 	font-weight: bold;
 	margin-top: 32px;
+	margin-bottom: 8px;
 	padding-left: 14px;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -308,10 +315,22 @@ h2 {
 		margin-right: 8px;
 
 		&__item {
-			border-radius: 2px;
+			border-radius: var(--border-radius-pill);
 			padding: 8px 16px;
 			font-weight: bold;
 			background-color: var(--color-background-dark);
+
+			&:first-of-type {
+				border-top-right-radius: 0;
+				border-bottom-right-radius: 0;
+				padding-right: 8px;
+			}
+
+			&:last-of-type {
+				border-top-left-radius: 0;
+				border-bottom-left-radius: 0;
+				padding-left: 8px;
+			}
 
 			&--active {
 				background-color: var(--color-primary);
