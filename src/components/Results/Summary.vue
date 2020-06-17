@@ -21,18 +21,18 @@
   -->
 
 <template>
-	<div class="section question">
+	<div class="section question-summary">
 		<h3>{{ question.text }}</h3>
-		<p class="question-detail">
+		<p class="question-summary__detail">
 			{{ answerTypes[question.type].label }}
 		</p>
 		<ol v-if="question.type == 'multiple' || question.type == 'multiple_unique' || question.type == 'dropdown'"
-			class="question-multiple">
-			<li v-for="questionOption in questionOptions"
-				:key="questionOption.id">
+			class="question-summary__statistic">
+			<li v-for="(questionOption, index) in questionOptions"
+				:key="index">
 				<label :for="questionOption.text.replace(/\s+/g, '')">
-					{{ questionOption.count }} <span class="question-option-percentage">({{ questionOption.percentage }}%):</span>
-					<span class="question-option-text">{{ questionOption.text }}</span>
+					{{ questionOption.count }} <span class="question-summary__statistic-percentage">({{ questionOption.percentage }}%):</span>
+					<span class="question-summary__statistic-text">{{ questionOption.text }}</span>
 				</label>
 				<meter :id="questionOption.text.replace(/\s+/g, '')"
 					min="0"
@@ -40,7 +40,7 @@
 					:value="questionOption.count" />
 			</li>
 		</ol>
-		<ul v-else class="question-text">
+		<ul v-else class="question-summary__text">
 			<li v-for="(textAnswer, index) in textAnswers"
 				:key="index">
 				<template v-if="index === 0">
@@ -169,7 +169,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.question {
+.question-summary {
 	padding-left: 16px;
 	padding-right: 16px;
 
@@ -177,7 +177,7 @@ export default {
 		font-weight: bold;
 	}
 
-	&-detail {
+	&__detail {
 		color: var(--color-text-lighter);
 		margin-top: -8px;
 	}
@@ -190,7 +190,7 @@ export default {
 	ol {
 		margin-top: 8px;
 
-		&.question-text {
+		&__text {
 			list-style-type: initial;
 
 			li {
@@ -198,7 +198,7 @@ export default {
 			}
 		}
 
-		&.question-multiple {
+		&__statistic {
 			li {
 				position: relative;
 				padding: 8px 0;
@@ -207,11 +207,11 @@ export default {
 					cursor: default;
 				}
 
-				&:first-child .question-option-text {
+				&:first-child .question-summary__statistic-text {
 					font-weight: bold;
 				}
 
-				.question-option-percentage {
+				.question-summary__statistic-percentage {
 					color: var(--color-text-maxcontrast);
 				}
 
