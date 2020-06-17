@@ -182,64 +182,62 @@ export default {
 		margin-top: -8px;
 	}
 
-	ol {
-		list-style-type: none;
+	&__text,
+	&__statistic {
+		margin-top: 8px;
 	}
 
-	ul,
-	ol {
-		margin-top: 8px;
+	&__text {
+		list-style-type: initial;
 
-		&__text {
-			list-style-type: initial;
-
-			li {
-				padding: 4px 0;
-			}
+		li {
+			padding: 4px 0;
 		}
+	}
 
-		&__statistic {
-			li {
-				position: relative;
-				padding: 8px 0;
+	&__statistic {
+		list-style-type: none;
 
-				label {
-					cursor: default;
-				}
+		li {
+			position: relative;
+			padding: 8px 0;
 
-				&:first-child .question-summary__statistic-text {
-					font-weight: bold;
-				}
+			label {
+				cursor: default;
+			}
 
-				.question-summary__statistic-percentage {
-					color: var(--color-text-maxcontrast);
-				}
+			&:first-child .question-summary__statistic-text {
+				font-weight: bold;
+			}
 
-				meter {
-					display: block;
-					width: 100%;
-					margin-top: 4px;
-					background: var(--color-background-dark);
-					height: calc(var(--border-radius) * 2);
+			.question-summary__statistic-percentage {
+				color: var(--color-text-maxcontrast);
+			}
+
+			meter {
+				display: block;
+				width: 100%;
+				margin-top: 4px;
+				background: var(--color-background-dark);
+				height: calc(var(--border-radius) * 2);
+				border-radius: var(--border-radius);
+
+				&::-webkit-meter-optimum-value,
+				&::-moz-meter-bar {
+					background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
 					border-radius: var(--border-radius);
-
-					&::-webkit-meter-optimum-value,
-					&::-moz-meter-bar {
-						background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
-						border-radius: var(--border-radius);
-						-webkit-transition: background-color .3s ease;
-						transition: background-color .3s ease;
-					}
+					-webkit-transition: background-color .3s ease;
+					transition: background-color .3s ease;
 				}
+			}
 
-				&:hover meter::-webkit-meter-optimum-value,
-				&:hover meter::-moz-meter-bar,
-				&:focus meter::-webkit-meter-optimum-value,
-				&:focus meter::-moz-meter-bar {
-					animation: percentage-animation 1s linear infinite;
-					background: linear-gradient(40deg, var(--color-primary-element), var(--color-primary-element-light) 33%, var(--color-primary-element) 67%, var(--color-primary-element-light));
-					background-size: 300% 100%;
-				}
+			&:hover meter::-webkit-meter-optimum-value,
+			&:hover meter::-moz-meter-bar,
+			&:focus meter::-webkit-meter-optimum-value,
+			&:focus meter::-moz-meter-bar {
+				animation: percentage-animation 1s linear infinite;
+				background: linear-gradient(40deg, var(--color-primary-element), var(--color-primary-element-light) 33%, var(--color-primary-element) 67%, var(--color-primary-element-light));
+				background-size: 300% 100%;
 			}
 		}
 	}
