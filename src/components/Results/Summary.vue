@@ -26,20 +26,24 @@
 		<p class="question-summary__detail">
 			{{ answerTypes[question.type].label }}
 		</p>
-		<ol v-if="question.type == 'multiple' || question.type == 'multiple_unique' || question.type == 'dropdown'"
+
+		<!-- Answers with countable results for visualization -->
+		<ol v-if="question.type === 'multiple' || question.type === 'multiple_unique' || question.type === 'dropdown'"
 			class="question-summary__statistic">
 			<li v-for="(questionOption, index) in questionOptions"
 				:key="index">
-				<label :for="questionOption.text.replace(/\s+/g, '')">
+				<label :for="removeSpaces(questionOption.text)">
 					{{ questionOption.count }} <span class="question-summary__statistic-percentage">({{ questionOption.percentage }}%):</span>
 					<span class="question-summary__statistic-text">{{ questionOption.text }}</span>
 				</label>
-				<meter :id="questionOption.text.replace(/\s+/g, '')"
+				<meter :id="removeSpaces(questionOption.text)"
 					min="0"
 					:max="submissions.length"
 					:value="questionOption.count" />
 			</li>
 		</ol>
+
+		<!-- Text answers are simply listed for now, could be automatically grouped in the future -->
 		<ul v-else class="question-summary__text">
 			<li v-for="(textAnswer, index) in textAnswers"
 				:key="index">
@@ -80,22 +84,18 @@ export default {
 	computed: {
 		// For countable questions like multiple choice and checkboxes
 		questionOptions() {
-			const questionOptionsStats = []
+			// Build list of question options
+			const questionOptionsStats = this.question.options.map(option => ({
+				text: option.text,
+				count: 0,
+				percentage: 0,
+			}))
 
 			// Also record 'No response'
-			questionOptionsStats.push({
-				'text': t('forms', 'No response'),
-				'count': 0,
-				'percentage': 0,
-			})
-
-			// Build list of question options
-			this.question.options.forEach(option => {
-				questionOptionsStats.push({
-					'text': option.text,
-					'count': 0,
-					'percentage': 0,
-				})
+			questionOptionsStats.unshift({
+				text: t('forms', 'No response'),
+				count: 0,
+				percentage: 0,
 			})
 
 			// Go through submissions to check which options have how many responses
@@ -163,6 +163,12 @@ export default {
 			textAnswers.unshift(noResponseCount + ' (' + noResponsePercentage + '%): ' + t('forms', 'No response'))
 
 			return textAnswers
+		},
+	},
+
+	methods: {
+		removeSpaces(string) {
+			return string.replace(/\s+/g, '')
 		},
 	},
 }

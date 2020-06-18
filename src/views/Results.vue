@@ -40,6 +40,8 @@
 		<header v-if="!noSubmissions">
 			<h2>{{ formTitle }}</h2>
 			<p>{{ t('forms', '{amount} responses', { amount: form.submissions.length }) }}</p>
+
+			<!-- View switcher between Summary and Responses -->
 			<div class="response-actions">
 				<div class="response-actions__radio">
 					<input id="show-summary--true"
@@ -63,6 +65,8 @@
 						{{ t('forms', 'Responses') }}
 					</label>
 				</div>
+
+				<!-- Action menu for CSV export and deletion -->
 				<Actions class="results-menu"
 					:aria-label="t('forms', 'Options')"
 					:force-menu="true">
@@ -91,6 +95,7 @@
 			</EmptyContent>
 		</section>
 
+		<!-- Summary view for visualization -->
 		<section v-if="!noSubmissions && showSummary">
 			<Summary
 				v-for="question in form.questions"
@@ -99,6 +104,7 @@
 				:submissions="form.submissions" />
 		</section>
 
+		<!-- Responses view for individual responses -->
 		<section v-if="!noSubmissions && !showSummary">
 			<Submission
 				v-for="submission in form.submissions"
