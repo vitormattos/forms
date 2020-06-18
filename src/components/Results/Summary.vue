@@ -228,7 +228,19 @@ export default {
 				height: calc(var(--border-radius) * 2);
 				border-radius: var(--border-radius);
 
-				&::-webkit-meter-optimum-value,
+				&::-webkit-meter-bar {
+					height: calc(var(--border-radius) * 2);
+					border: none;
+				}
+
+				// The pseudo-classes of -moz and -webkit have to stay separated even with SCSS, otherwise they don’t work
+				&::-webkit-meter-optimum-value {
+					background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
+					border-radius: var(--border-radius);
+					-webkit-transition: background-color .3s ease;
+					transition: background-color .3s ease;
+				}
+
 				&::-moz-meter-bar {
 					background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
 					border-radius: var(--border-radius);
