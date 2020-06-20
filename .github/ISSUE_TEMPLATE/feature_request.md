@@ -7,6 +7,10 @@ assignees: ''
 
 ---
 
+**Nextcloud (please complete the following information):**
+- Nextcloud-Version: [e.g. 18.0.4]
+- Forms-Version: [e.g. 1.1.1]
+
 **Is your feature request related to a problem? Please describe.**
 A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
 
