@@ -30,28 +30,31 @@
 		<!-- Answers with countable results for visualization -->
 		<ol v-if="question.type === 'multiple' || question.type === 'multiple_unique' || question.type === 'dropdown'"
 			class="question-summary__statistic">
-			<li v-for="(questionOption, index) in questionOptions"
-				:key="index">
-				<label :for="removeSpaces(questionOption.text)">
-					{{ questionOption.count }} <span class="question-summary__statistic-percentage">({{ questionOption.percentage }}%):</span>
-					<span class="question-summary__statistic-text">{{ questionOption.text }}</span>
+			<li v-for="option in questionOptions"
+				:key="option.id">
+				<label :for="`option-${option.questionId}-${option.id}`">
+					{{ option.count }}
+					<span class="question-summary__statistic-percentage">
+						({{ option.percentage }}%):
+					</span>
+					<span class="question-summary__statistic-text">{{ option.text }}</span>
 				</label>
-				<meter :id="removeSpaces(questionOption.text)"
+				<meter :id="`option-${option.questionId}-${option.id}`"
 					min="0"
 					:max="submissions.length"
-					:value="questionOption.count" />
+					:value="option.count" />
 			</li>
 		</ol>
 
 		<!-- Text answers are simply listed for now, could be automatically grouped in the future -->
 		<ul v-else class="question-summary__text">
-			<li v-for="(textAnswer, index) in textAnswers"
-				:key="index">
+			<li v-for="answer in textAnswers"
+				:key="answer.id">
 				<template v-if="index === 0">
-					<strong>{{ textAnswer }}</strong>
+					<strong>{{ answer }}</strong>
 				</template>
 				<template v-else>
-					{{ textAnswer }}
+					{{ answer }}
 				</template>
 			</li>
 		</ul>
@@ -86,7 +89,7 @@ export default {
 		questionOptions() {
 			// Build list of question options
 			const questionOptionsStats = this.question.options.map(option => ({
-				text: option.text,
+				...option,
 				count: 0,
 				percentage: 0,
 			}))
@@ -165,12 +168,6 @@ export default {
 			return textAnswers
 		},
 	},
-
-	methods: {
-		removeSpaces(string) {
-			return string.replace(/\s+/g, '')
-		},
-	},
 }
 </script>
 
@@ -230,42 +227,19 @@ export default {
 
 				&::-webkit-meter-bar {
 					height: calc(var(--border-radius) * 2);
-					border: none;
 				}
 
 				// The pseudo-classes of -moz and -webkit have to stay separated even with SCSS, otherwise they don’t work
 				&::-webkit-meter-optimum-value {
 					background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
 					border-radius: var(--border-radius);
-					-webkit-transition: background-color .3s ease;
-					transition: background-color .3s ease;
 				}
 
 				&::-moz-meter-bar {
 					background: linear-gradient(40deg, var(--color-primary-element) 0%, var(--color-primary-element-light) 100%);
 					border-radius: var(--border-radius);
-					-webkit-transition: background-color .3s ease;
-					transition: background-color .3s ease;
 				}
 			}
-
-			&:hover meter::-webkit-meter-optimum-value,
-			&:hover meter::-moz-meter-bar,
-			&:focus meter::-webkit-meter-optimum-value,
-			&:focus meter::-moz-meter-bar {
-				animation: percentage-animation 1s linear infinite;
-				background: linear-gradient(40deg, var(--color-primary-element), var(--color-primary-element-light) 33%, var(--color-primary-element) 67%, var(--color-primary-element-light));
-				background-size: 300% 100%;
-			}
-		}
-	}
-
-	@keyframes percentage-animation {
-		0% {
-			background-position: 100%;
-		}
-		to {
-			background-position: 0;
 		}
 	}
 }
