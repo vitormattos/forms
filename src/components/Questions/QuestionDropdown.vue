@@ -89,9 +89,6 @@ import AnswerInput from './AnswerInput'
 import QuestionMixin from '../../mixins/QuestionMixin'
 import GenRandomId from '../../utils/GenRandomId'
 
-// Implementations docs
-// https://www.w3.org/TR/2016/WD-wai-aria-practices-1.1-20160317/examples/radio/radio.html
-// https://www.w3.org/TR/2016/WD-wai-aria-practices-1.1-20160317/examples/checkbox/checkbox-2.html
 export default {
 	name: 'QuestionDropdown',
 
@@ -119,7 +116,8 @@ export default {
 		},
 
 		isMultiple() {
-			return this.answerType.multiple === true
+			// This can be extended if we want to include support for <select multiple>
+			return false
 		},
 
 		hasNoAnswer() {
@@ -346,30 +344,6 @@ export default {
 	position: relative;
 	display: inline-flex;
 	min-height: 44px;
-
-	.question__label {
-		flex: 1 1 100%;
-		// Overwrite guest page core styles
-		text-align: left !important;
-		// Some rounding issues lead to this strange number, so label and answerInput show up a the same position, working on different browsers.
-		padding: 6.5px 0 0 30px;
-		line-height: 22px;
-		min-height: 34px;
-		height: min-content;
-		position: relative;
-
-		&::before {
-			box-sizing: border-box;
-			// Adjust position manually for proper position to text
-			position: absolute;
-			top: 10px;
-			width: 16px;
-			height: 16px;
-			margin-bottom: 0;
-			margin-left: -30px !important;
-			margin-right: 14px !important;
-		}
-	}
 }
 
 // Using type to have a higher order than the input styling of server
@@ -385,14 +359,4 @@ export default {
 	font-size: 14px;
 	position: relative;
 }
-
-input.question__radio,
-input.question__checkbox {
-	z-index: -1;
-	// make sure browser warnings are properly
-	// displayed at the correct location
-	left: 0px;
-	width: 16px;
-}
-
 </style>

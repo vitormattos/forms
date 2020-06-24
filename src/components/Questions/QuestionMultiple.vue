@@ -66,6 +66,7 @@
 					:answer="answer"
 					:index="index"
 					:is-unique="isUnique"
+					:is-dropdown="false"
 					:max-option-length="maxStringLengths.optionText"
 					@add="addNewEntry"
 					@delete="deleteOption"
