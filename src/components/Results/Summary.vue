@@ -50,12 +50,7 @@
 		<ul v-else class="question-summary__text">
 			<li v-for="answer in textAnswers"
 				:key="answer.id">
-				<template v-if="index === 0">
-					<strong>{{ answer }}</strong>
-				</template>
-				<template v-else>
-					{{ answer }}
-				</template>
+				{{ answer }}
 			</li>
 		</ul>
 	</div>
@@ -195,6 +190,10 @@ export default {
 
 		li {
 			padding: 4px 0;
+
+			&:first-child {
+				font-weight: bold;
+			}
 		}
 	}
 
