@@ -4,6 +4,7 @@ OC.L10N.register(
     "Required" : "Шаардлагатай",
     "Group" : "Бүлэг",
     "Description" : "Тодорхойлолт",
+    "Summary" : "Хураангуй",
     "Settings" : "Тохиргоо",
     "Submit" : "мэдэгдэх"
 },
