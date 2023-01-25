@@ -50,5 +50,41 @@ export default {
 			shareHash: loadState('forms', 'shareHash'),
 		}
 	},
+
+	mounted() {
+		if (this.isEmbedded) {
+			// Communicate window size to parent window in iframes
+			const resizeObserver = new ResizeObserver(entries => {
+				this.emitResizeMessage(entries[0].target)
+			})
+			this.$nextTick(() => resizeObserver.observe(document.querySelector('.app-forms-embedded form')))
+		}
+	},
+
+	methods: {
+		/**
+		 * @param {HTMLElement} target Target of which the size should be communicated
+		 */
+		emitResizeMessage(target) {
+			const rect = target.getBoundingClientRect()
+			let height = rect.top + target.scrollHeight
+			let width = target.scrollWidth
+
+			// When submitted the height and width is 0
+			if (height === 0) {
+				target = document.querySelector('.app-forms-embedded main .empty-content')
+				height = target.getBoundingClientRect().top + target.scrollHeight
+				width = Math.max(target.scrollWidth, document.querySelector('.app-forms-embedded main header').scrollWidth)
+			}
+
+			window.parent?.postMessage({
+				type: 'resize-iframe',
+				payload: {
+					width,
+					height,
+				},
+			}, '*')
+		},
+	},
 }
 </script>
