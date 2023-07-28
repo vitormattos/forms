@@ -304,7 +304,7 @@ class PageController extends Controller {
 		Util::addStyle($this->appName, 'embedded');
 		$response = $this->publicLinkView($hash)->renderAs(TemplateResponse::RENDER_AS_BASE);
 
-		$this->initialStateService->provideInitialState($this->appName, 'isEmbedded', true);
+		$this->initialState->provideInitialState($this->appName, 'isEmbedded', true);
 
 		return $this->setEmbeddedCSP($response);
 	}
