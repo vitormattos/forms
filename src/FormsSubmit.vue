@@ -33,6 +33,7 @@
 import { loadState } from '@nextcloud/initial-state'
 import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
 import Submit from './views/Submit.vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'FormsSubmit',
@@ -53,12 +54,25 @@ export default {
 
 	mounted() {
 		if (this.isEmbedded) {
+			subscribe('forms:last-updated:set', (id) => {
+				window.parent?.postMessage({
+					type: 'form-saved',
+					payload: {
+						id,
+					},
+				}, '*')
+			})
+
 			// Communicate window size to parent window in iframes
 			const resizeObserver = new ResizeObserver(entries => {
 				this.emitResizeMessage(entries[0].target)
 			})
 			this.$nextTick(() => resizeObserver.observe(document.querySelector('.app-forms-embedded form')))
 		}
+	},
+
+	destroyed() {
+		unsubscribe('forms:last-updated:set')
 	},
 
 	methods: {
